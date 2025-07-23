@@ -1,19 +1,22 @@
-<!-- index.html -->
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>TaleTrail - Choose Genre</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TaleTrail - Home</title>
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-  <h1>Welcome to TaleTrail 📚</h1>
-  <div class="genre-container">
-    <div class="genre-card" onclick="selectGenre('Fiction')">Fiction</div>
-    <div class="genre-card" onclick="selectGenre('Romance')">Romance</div>
-    <div class="genre-card" onclick="selectGenre('Science')">Science</div>
-    <div class="genre-card" onclick="selectGenre('Comics')">Comics</div>
-    <!-- Add more genres -->
-  </div>
+  <h1 class="title">TaleTrail</h1>
+  <h2>Select a Genre</h2>
+  <select id="genreSelect">
+    <option value="">--Choose a Genre--</option>
+    <option value="fiction">Fiction</option>
+    <option value="romance">Romance</option>
+    <option value="technology">Technology</option>
+    <option value="selfhelp">Self Help</option>
+  </select>
+  <button onclick="goToBooks()">Explore Books</button>
 
   <script src="script.js"></script>
 </body>

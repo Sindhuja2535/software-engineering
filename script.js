@@ -1,51 +1,59 @@
-function selectGenre(genre) {
-  localStorage.setItem("selectedGenre", genre);
-  window.location.href = "books.html";
-}
-const books = [
-  { title: "Harry Potter", genre: "Fiction", price: 499 },
-  { title: "It Ends With Us", genre: "Romance", price: 399 },
-  { title: "Brief History of Time", genre: "Science", price: 349 },
-  { title: "Avengers Vol 1", genre: "Comics", price: 250 },
-  // Add more books
-];
+// Genre to Books Map
+const booksByGenre = {
+  fiction: ["The Great Gatsby", "To Kill a Mockingbird", "1984"],
+  romance: ["Pride and Prejudice", "The Notebook", "Me Before You"],
+  technology: ["Clean Code", "The Pragmatic Programmer", "AI Superpowers"],
+  selfhelp: ["Atomic Habits", "The Power of Now", "Deep Work"]
+};
 
+// Navigate from index to books
+function goToBooks() {
+  const genre = document.getElementById("genreSelect").value;
+  if (genre) {
+    localStorage.setItem("selectedGenre", genre);
+    window.location.href = "books.html";
+  } else {
+    alert("Please select a genre");
+  }
+}
+
+// Display books
 if (window.location.pathname.includes("books.html")) {
   const genre = localStorage.getItem("selectedGenre");
-  document.getElementById("genre-heading").innerText = `Books in ${genre}`;
-  
-  const list = document.getElementById("bookList");
-  const filtered = books.filter(b => b.genre === genre);
-  
-  filtered.forEach(book => {
-    const div = document.createElement("div");
-    div.className = "book-card";
-    div.innerHTML = `
-      <h3>${book.title}</h3>
-      <p>₹${book.price}</p>
-      <button onclick="orderBook('${book.title}', ${book.price})">Order</button>
-    `;
-    list.appendChild(div);
-  });
+  const bookListDiv = document.getElementById("bookList");
+
+  if (genre && booksByGenre[genre]) {
+    booksByGenre[genre].forEach((book) => {
+      const div = document.createElement("div");
+      div.innerHTML = `<p>${book}</p>
+      <button onclick="orderBook('${book}')">Order</button>`;
+      bookListDiv.appendChild(div);
+    });
+  } else {
+    bookListDiv.innerHTML = "<p>No books available.</p>";
+  }
 }
-function orderBook(title, price) {
+
+// Order a book
+function orderBook(bookName) {
   let orders = JSON.parse(localStorage.getItem("orders")) || [];
-  orders.push({ title, price, date: new Date().toLocaleString() });
+  orders.push(bookName);
   localStorage.setItem("orders", JSON.stringify(orders));
-  alert("Book ordered! Check order page.");
+  alert(`${bookName} added to your orders.`);
 }
+
+// Show orders
 if (window.location.pathname.includes("order.html")) {
   const orders = JSON.parse(localStorage.getItem("orders")) || [];
-  const container = document.getElementById("orderList");
+  const orderList = document.getElementById("orderList");
 
   if (orders.length === 0) {
-    container.innerHTML = "<p>No orders yet.</p>";
+    orderList.innerHTML = "<li>No orders yet.</li>";
   } else {
-    orders.forEach(order => {
-      const div = document.createElement("div");
-      div.className = "order-card";
-      div.innerHTML = `<strong>${order.title}</strong> - ₹${order.price} <br><small>${order.date}</small>`;
-      container.appendChild(div);
+    orders.forEach((book) => {
+      const li = document.createElement("li");
+      li.textContent = book;
+      orderList.appendChild(li);
     });
   }
 }
